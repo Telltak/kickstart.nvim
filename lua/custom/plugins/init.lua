@@ -2,4 +2,40 @@
 --  I promise not to create any merge conflicts in this directory :)
 --
 -- See the kickstart.nvim README for more information
+-- TODO: Think if I need to reinstall lint tools ( play with conform?)
+-- TODO: Consider telescope-undo
+-- TODO: Consider vim-terraform?
+-- TODO: Consider vim-comentary
+
+pcall(require('telescope').load_extension, 'harpoon')
+pcall(require('telescope').load_extension, 'undo')
+
+require('which-key').register {
+  ['<leader>g'] = { name = '[G]it', _ = 'which_key_ignore' },
+  ['<leader>h'] = { name = 'More git', _ = 'which_key_ignore' },
+  ['<leader>v'] = { name = '[V]ertical things', _ = 'which_key_ignore' },
+  ['<leader>t'] = { name = '[T]elescope', _ = 'which_key_ignore' },
+}
+
+vim.keymap.set('n', '<leader>ve', ':Vexplore<CR>', { desc = '[V][e]xplore directory' })
+-- vim.keymap.set('n', '<leader>mh', '<C-w>h', { desc = '[m]ove cursor left' })
+-- vim.keymap.set('n', '<leader>ml', '<C-w>l', { desc = '[m]ove cursor right' })
+-- vim.keymap.set('n', '<leader>mj', '<C-w>j', { desc = '[m]ove cursor down' })
+-- vim.keymap.set('n', '<leader>mk', '<C-w>k', { desc = '[m]ove cursor up' })
+vim.keymap.set('n', '<leader>fm', require('harpoon.ui').toggle_quick_menu, { desc = 'Harpoon menu' })
+vim.keymap.set('n', '<leader>ff', require('harpoon.mark').add_file, { desc = 'Harpoon add file' })
+-- vim.keymap.set('n', '<leader>tu', require('telescope').extensions.undo.undo, { desc = '[U]ndo [T]elescope' })
+vim.keymap.set('n', '<leader>y', '"+y', { desc = '[Y]ank globally' })
+vim.keymap.set('v', '<leader>y', '"+y', { desc = '[Y]ank globally' })
+vim.keymap.set('n', '<leader>p', '"+p', { desc = '[P]aste globally' })
+vim.keymap.set('v', '<leader>p', '"+p', { desc = '[P]aste globally' })
+vim.keymap.set('n', '<leader>Y', '"+Y', { desc = '[Y]ank globally' })
+vim.keymap.set('v', '<leader>Y', '"+Y', { desc = '[Y]ank globally' })
+vim.keymap.set('n', '<leader>P', '"+P', { desc = '[P]aste globally' })
+vim.keymap.set('v', '<leader>P', '"+P', { desc = '[P]aste globally' })
+vim.keymap.set('n', '<leader>tt', ':TodoTelescope<CR>', { desc = '[T]elescope [T]odo' })
+vim.keymap.set('n', '<leader>gs', vim.cmd.Git, { desc = '[G]it [S]tatus' })
+vim.keymap.set('n', '<leader>gp', ':Git push<CR>', { desc = '[G]it [P]ush' })
+vim.keymap.set('n', '<leader>gc', ':Git checkout<CR>', { desc = '[G]it [C]heckout' })
+
 return {}
