@@ -105,7 +105,7 @@ vim.g.have_nerd_font = false
 vim.opt.relativenumber = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
-vim.opt.mouse = 'a'
+-- vim.opt.mouse = 'a'
 
 -- Don't show the mode, since it's already in status line
 vim.opt.showmode = false
@@ -563,6 +563,13 @@ require('lazy').setup({
             },
           },
         },
+        pylsp = {
+          pylsp = {
+            plugins = {
+              -- jedi = { environment = which_python() }, Should find a good way to do this with venvs
+            },
+          },
+        },
       }
 
       -- Ensure the servers and tools above are installed
@@ -812,6 +819,40 @@ require('lazy').setup({
   --    For additional information, see `:help lazy.nvim-lazy.nvim-structuring-your-plugins`
   {
     'ThePrimeagen/harpoon',
+    branch = 'harpoon2',
+    dependencies = { 'nvim-lua/plenary.nvim' },
+  },
+  {
+    'toppair/peek.nvim',
+    event = { 'VeryLazy' },
+    build = 'deno task --quiet build:fast',
+    config = function()
+      require('peek').setup()
+      vim.api.nvim_create_user_command('PeekOpen', require('peek').open, {})
+      vim.api.nvim_create_user_command('PeekClose', require('peek').close, {})
+    end,
+  },
+  {
+    'tpope/vim-fugitive',
+  },
+  {
+    'kevinhwang91/nvim-ufo',
+    event = 'BufEnter',
+    dependencies = {
+      'kevinhwang91/promise-async',
+    },
+    config = function()
+      --- @diagnostic disable: unused-local
+      require('ufo').setup {
+        provider_selector = function(_bufnr, _filetype, _buftype)
+          return { 'treesitter', 'indent' }
+        end,
+      }
+    end,
+  },
+  {
+    'stevearc/oil.nvim',
+    opts = {},
   },
   { import = 'custom.plugins' },
 }, {

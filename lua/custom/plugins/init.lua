@@ -7,7 +7,29 @@
 -- TODO: Consider vim-terraform?
 -- TODO: Consider vim-comentary
 
-pcall(require('telescope').load_extension, 'harpoon')
+-- HARPOON
+local harpoon = require 'harpoon'
+harpoon:setup()
+
+vim.keymap.set('n', '<C-f>', function()
+  harpoon:list():add()
+end, { desc = 'Harpoon add file' })
+vim.keymap.set('n', '<C-m>', function()
+  harpoon.ui:toggle_quick_menu(harpoon:list())
+end, { desc = 'Open harpoon window' })
+vim.keymap.set('n', '<C-n>', function()
+  harpoon:list():next { ui_nav_wrap = true }
+end, { desc = 'Next harpoon file' })
+vim.keymap.set('n', '<C-p>', function()
+  harpoon:list():prev { ui_nav_wrap = true }
+end, { desc = 'Previous harpoon file' })
+
+-- HARPOON
+
+-- OIL
+require('oil').setup { default_file_explorer = true }
+-- OIL
+
 pcall(require('telescope').load_extension, 'undo')
 
 require('which-key').register {
@@ -17,13 +39,12 @@ require('which-key').register {
   ['<leader>t'] = { name = '[T]elescope', _ = 'which_key_ignore' },
 }
 
+vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = 'Open parent directory' })
 vim.keymap.set('n', '<leader>ve', ':Vexplore<CR>', { desc = '[V][e]xplore directory' })
--- vim.keymap.set('n', '<leader>mh', '<C-w>h', { desc = '[m]ove cursor left' })
--- vim.keymap.set('n', '<leader>ml', '<C-w>l', { desc = '[m]ove cursor right' })
--- vim.keymap.set('n', '<leader>mj', '<C-w>j', { desc = '[m]ove cursor down' })
--- vim.keymap.set('n', '<leader>mk', '<C-w>k', { desc = '[m]ove cursor up' })
-vim.keymap.set('n', '<leader>fm', require('harpoon.ui').toggle_quick_menu, { desc = 'Harpoon menu' })
-vim.keymap.set('n', '<leader>ff', require('harpoon.mark').add_file, { desc = 'Harpoon add file' })
+vim.keymap.set('n', '<leader>mh', '<C-w>h', { desc = '[m]ove cursor left' })
+vim.keymap.set('n', '<leader>ml', '<C-w>l', { desc = '[m]ove cursor right' })
+vim.keymap.set('n', '<leader>mj', '<C-w>j', { desc = '[m]ove cursor down' })
+vim.keymap.set('n', '<leader>mk', '<C-w>k', { desc = '[m]ove cursor up' })
 -- vim.keymap.set('n', '<leader>tu', require('telescope').extensions.undo.undo, { desc = '[U]ndo [T]elescope' })
 vim.keymap.set('n', '<leader>y', '"+y', { desc = '[Y]ank globally' })
 vim.keymap.set('v', '<leader>y', '"+y', { desc = '[Y]ank globally' })
@@ -37,5 +58,10 @@ vim.keymap.set('n', '<leader>tt', ':TodoTelescope<CR>', { desc = '[T]elescope [T
 vim.keymap.set('n', '<leader>gs', vim.cmd.Git, { desc = '[G]it [S]tatus' })
 vim.keymap.set('n', '<leader>gp', ':Git push<CR>', { desc = '[G]it [P]ush' })
 vim.keymap.set('n', '<leader>gc', ':Git checkout<CR>', { desc = '[G]it [C]heckout' })
+
+vim.o.foldcolumn = '1'
+vim.o.foldlevel = 99
+vim.o.foldlevelstart = 99
+vim.o.foldenable = true
 
 return {}
