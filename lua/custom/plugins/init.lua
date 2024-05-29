@@ -64,4 +64,20 @@ vim.o.foldlevel = 99
 vim.o.foldlevelstart = 99
 vim.o.foldenable = true
 
+vim.api.nvim_create_autocmd('VimEnter', {
+  desc = 'Auto select virtualenv Nvim open',
+  pattern = '*',
+  callback = function()
+    local venv = vim.fn.findfile('pyproject.toml', vim.fn.getcwd() .. ';')
+    if venv ~= '' then
+      require('venv-selector').retrieve_from_cache()
+    end
+  end,
+  once = true,
+})
+
+require('venv-selector').setup {
+  poetry_path = '$HOME/.cache/pypoetry/virtualenvs',
+}
+
 return {}
