@@ -58,6 +58,7 @@ vim.keymap.set('n', '<leader>tt', ':TodoTelescope<CR>', { desc = '[T]elescope [T
 vim.keymap.set('n', '<leader>gs', vim.cmd.Git, { desc = '[G]it [S]tatus' })
 vim.keymap.set('n', '<leader>gp', ':Git push<CR>', { desc = '[G]it [P]ush' })
 vim.keymap.set('n', '<leader>gc', ':Git checkout<CR>', { desc = '[G]it [C]heckout' })
+vim.keymap.set('n', '<leader>jq', ':%!jq .<CR>', { desc = '[J][Q] the file' })
 
 vim.o.foldcolumn = '1'
 vim.o.foldlevel = 99
