@@ -5,7 +5,7 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 -- Set to true if you have a Nerd Font installed
-vim.g.have_nerd_font = false
+vim.g.have_nerd_font = true
 vim.opt.termguicolors = true
 
 -- [[ Setting options ]]
@@ -474,13 +474,13 @@ require('lazy').setup({
             },
           },
         },
-        pylsp = {
-          pylsp = {
-            plugins = {
-              -- jedi = { environment = which_python() }, Should find a good way to do this with venvs
-            },
-          },
-        },
+        -- pylsp = {
+        --   pylsp = {
+        --     plugins = {
+        --       -- jedi = { environment = which_python() }, Should find a good way to do this with venvs
+        --     },
+        --   },
+        -- },
       }
 
       -- Ensure the servers and tools above are installed
@@ -766,22 +766,26 @@ require('lazy').setup({
     opts = {},
   },
   {
-    'linux-cultist/venv-selector.nvim',
-    dependencies = { 'neovim/nvim-lspconfig', 'nvim-telescope/telescope.nvim', 'mfussenegger/nvim-dap-python' },
-    opts = {
-      -- Your options go here
-      -- name = "venv",
-      -- auto_refresh = false
-    },
-    branch = 'regexp',
-    event = 'VeryLazy', -- Optional: needed only if you want to type `:VenvSelect` without a keymapping
-    keys = {
-      -- Keymap to open VenvSelector to pick a venv.
-      { '<leader>vs', '<cmd>VenvSelect<cr>' },
-      -- Keymap to retrieve the venv from a cache (the one previously used for the same project directory).
-      { '<leader>vc', '<cmd>VenvSelectCached<cr>' },
-    },
+    'neolooong/whichpy.nvim',
+    opts = {},
   },
+  -- {
+  --   'linux-cultist/venv-selector.nvim',
+  --   dependencies = { 'neovim/nvim-lspconfig', 'nvim-telescope/telescope.nvim', 'mfussenegger/nvim-dap-python' },
+  --   opts = {
+  --     -- Your options go here
+  --     -- name = "venv",
+  --     -- auto_refresh = false
+  --   },
+  --   branch = 'regexp',
+  --   event = 'VeryLazy', -- Optional: needed only if you want to type `:VenvSelect` without a keymapping
+  --   keys = {
+  --     -- Keymap to open VenvSelector to pick a venv.
+  --     { '<leader>vs', '<cmd>VenvSelect<cr>' },
+  --     -- Keymap to retrieve the venv from a cache (the one previously used for the same project directory).
+  --     { '<leader>vc', '<cmd>VenvSelectCached<cr>' },
+  --   },
+  -- },
   {
     'NeogitOrg/neogit',
     dependencies = {
@@ -791,6 +795,134 @@ require('lazy').setup({
     },
     config = true,
   },
+  {
+    'akinsho/toggleterm.nvim',
+    config = true,
+  },
+  {
+    'MeanderingProgrammer/render-markdown.nvim',
+    dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.nvim' }, -- if you use the mini.nvim suite
+    -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.icons' }, -- if you use standalone mini plugins
+    -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' }, -- if you prefer nvim-web-devicons
+    ---@module 'render-markdown'
+    ---@type render.md.UserConfig
+    opts = {},
+  },
+  {
+    'christoomey/vim-tmux-navigator',
+    cmd = {
+      'TmuxNavigateLeft',
+      'TmuxNavigateDown',
+      'TmuxNavigateUp',
+      'TmuxNavigateRight',
+      'TmuxNavigatePrevious',
+      'TmuxNavigatorProcessList',
+    },
+    keys = {
+      { '<c-h>', '<cmd><C-U>TmuxNavigateLeft<cr>' },
+      { '<c-j>', '<cmd><C-U>TmuxNavigateDown<cr>' },
+      { '<c-k>', '<cmd><C-U>TmuxNavigateUp<cr>' },
+      { '<c-l>', '<cmd><C-U>TmuxNavigateRight<cr>' },
+      { '<c-\\>', '<cmd><C-U>TmuxNavigatePrevious<cr>' },
+    },
+  },
+  {
+    {
+      'nvim-neotest/neotest',
+      dependencies = {
+        'nvim-neotest/nvim-nio',
+        'nvim-lua/plenary.nvim',
+        'antoinemadec/FixCursorHold.nvim',
+        'nvim-treesitter/nvim-treesitter',
+        {
+          'fredrikaverpil/neotest-golang',
+          version = '*',
+          dependencies = {
+            'andythigpen/nvim-coverage', -- Added dependency
+          },
+        },
+      },
+      config = function()
+        local function getsrcdir()
+          local cwd = vim.fn.getcwd()
+          if cwd:sub(-#'src') then
+            return cwd
+          else
+            return cwd + '/src'
+          end
+        end
+        local neotest_golang_opts = { -- Specify configuration
+          runner = 'go',
+          go_test_args = {
+            '-v',
+            '-race',
+            '-count=1',
+            '-coverprofile=' .. getsrcdir() .. '/coverage.out',
+          },
+        }
+        require('neotest').setup {
+          adapters = {
+            require 'neotest-golang'(neotest_golang_opts), -- Registration
+          },
+        }
+      end,
+    },
+  },
+  -- {
+  --   {
+  --     'nvim-neotest/neotest',
+  --     dependencies = {
+  --       'nvim-neotest/nvim-nio',
+  --       'nvim-lua/plenary.nvim',
+  --       'antoinemadec/FixCursorHold.nvim',
+  --       'nvim-treesitter/nvim-treesitter',
+  --       { 'fredrikaverpil/neotest-golang', version = '*' }, -- Installation
+  --     },
+  --     config = function()
+  --       local neotest_golang_opts = {
+  --         runner = 'go',
+  --         go_test_args = {
+  --           '-v',
+  --           '-race',
+  --           '-count=1',
+  --           '-coverprofile=' .. vim.fn.getcwd() .. '/coverage.out',
+  --         },
+  --       } -- Specify custom configuration
+  --       require('neotest').setup {
+  --         adapters = {
+  --           require 'neotest-golang'(neotest_golang_opts), -- Registration
+  --         },
+  --       }
+  --     end,
+  --   },
+  -- },
+  {
+    'andythigpen/nvim-coverage',
+    dependencies = { 'nvim-lua/plenary.nvim' },
+    keys = {
+      { '<leader>tc', '<cmd>Coverage<cr>', desc = 'Coverage in gutter' },
+      { '<leader>tC', '<cmd>CoverageLoad<cr><cmd>CoverageSummary<cr>', desc = 'Coverage summary' },
+    },
+    opts = {
+      auto_reload = true,
+      lang = {
+        go = {
+          coverage_file = vim.fn.getcwd() .. '/coverage.out',
+        },
+      },
+    },
+  },
+  -- {
+  --   'andythigpen/nvim-coverage',
+  --   version = '*',
+  --   config = function()
+  --     require('coverage').setup {
+  --       auto_reload = true,
+  --
+  --     }
+  --   end,
+  -- },
+  { 'nvim-tree/nvim-web-devicons', opts = {} },
   { import = 'custom.plugins' },
 }, {
   ui = {
